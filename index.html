@@ -1,0 +1,1546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Pet Haus — Grooming & More</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500&family=Montserrat:wght@400;500;600&family=Nunito+Sans:ital,opsz,wdth,wght@0,6..12,75..125,200..1000&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --cream: #eddbd3;
+      --blush: #eddbd3;
+      --rose: #8b2a35;
+      --rose-light: #a33d48;
+      --rose-deep: #6b1e28;
+      --rose-muted: #c47a82;
+      --rose-pale: #e8b8be;
+      --dark: #2a1418;
+      --text: #3d1e22;
+      --text-muted: #7a4a50;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* ── CUSTOM CHECKBOXES ── */
+    .service-checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 18px;
+      cursor: pointer;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.88rem;
+      color: var(--text);
+      border-bottom: 1px solid var(--rose-pale);
+      transition: background 0.2s;
+      user-select: none;
+    }
+    .service-checkbox-label:last-child { border-bottom: none; }
+    .service-checkbox-label:hover { background: rgba(139,42,53,0.06); }
+    .service-checkbox-label input[type="checkbox"] { display: none; }
+    .service-checkbox-label .custom-check {
+      width: 18px;
+      height: 18px;
+      border: 1.5px solid var(--rose-pale);
+      border-radius: 5px;
+      background: #f5e8e0;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .service-checkbox-label input[type="checkbox"]:checked + .custom-check {
+      background: var(--rose);
+      border-color: var(--rose);
+    }
+    .service-checkbox-label .custom-check svg {
+      display: none;
+      width: 11px;
+      height: 11px;
+    }
+    .service-checkbox-label input[type="checkbox"]:checked + .custom-check svg {
+      display: block;
+    }
+
+    /* ── STORY LAYOUT ── */
+    .story-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: stretch;
+      max-width: 1000px;
+      margin: 32px auto 0;
+      text-align: left;
+    }
+    .story-text {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .story-image { width: 100%; display: flex; flex-direction: column; }
+
+    @media (max-width: 720px) {
+      .story-layout {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+    }
+
+    /* ── NAVBAR ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5vw;
+      height: 80px;
+      background: rgba(245, 232, 224, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--rose-pale);
+      transition: box-shadow 0.3s;
+    }
+    nav.scrolled { box-shadow: 0 4px 30px rgba(139,42,53,0.12); }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      text-decoration: none;
+    }
+    .nav-logo img {
+      height: 54px;
+      width: 54px;
+      object-fit: contain;
+      border-radius: 50%;
+      filter: drop-shadow(0 2px 8px rgba(139,42,53,0.2));
+    }
+    .nav-logo-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1;
+    }
+    .nav-logo-text {
+      display: inline-flex;
+      flex-direction: column;
+      line-height: 1;
+      align-items: center;
+    }
+    .nav-title {
+      font-family: 'Nunito Sans', sans-serif;
+      font-stretch: expanded;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--rose);
+      letter-spacing: 0.08em;
+      white-space: nowrap;
+    }
+    .nav-sub {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 400;
+      color: var(--rose-muted);
+      text-transform: uppercase;
+      margin-top: 3px;
+      display: block;
+      white-space: nowrap;
+      font-size: 0.62rem;
+      letter-spacing: 0.22em;
+      text-align: center;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 38px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text);
+      text-decoration: none;
+      position: relative;
+      padding-bottom: 3px;
+      transition: color 0.3s;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 0; height: 1px;
+      background: var(--rose);
+      transition: width 0.3s;
+    }
+    .nav-links a:hover { color: var(--rose); }
+    .nav-links a:hover::after { width: 100%; }
+
+    .nav-book-btn {
+      background: var(--rose);
+      color: var(--cream) !important;
+      padding: 10px 24px !important;
+      border-radius: 30px;
+      font-size: 0.78rem !important;
+      letter-spacing: 0.14em !important;
+      transition: background 0.3s, transform 0.2s !important;
+    }
+    .nav-book-btn::after { display: none !important; }
+    .nav-book-btn:hover {
+      background: var(--rose-deep) !important;
+      color: var(--cream) !important;
+      transform: translateY(-1px);
+    }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 6px;
+      background: none;
+      border: none;
+    }
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 1.5px;
+      background: var(--rose);
+      transition: all 0.3s;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 80px; left: 0; right: 0;
+      background: var(--cream);
+      border-bottom: 1px solid var(--rose-pale);
+      padding: 28px 5vw;
+      z-index: 999;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text);
+      text-decoration: none;
+      border-bottom: 1px solid var(--rose-pale);
+      padding-bottom: 16px;
+      transition: color 0.3s;
+    }
+    .mobile-menu a:hover { color: var(--rose); }
+    .mobile-menu a:last-child { border-bottom: none; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      padding: 100px 5vw 60px;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 70% 60% at 80% 50%, rgba(196,122,130,0.18) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 70% at 10% 80%, rgba(139,42,53,0.08) 0%, transparent 60%),
+        #f5e8e0;
+    }
+
+    .hero {
+      background: #f5e8e0;
+    }
+
+    .hero-paw-pattern {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      opacity: 0.04;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Ccircle cx='40' cy='30' r='8' fill='%238b2a35'/%3E%3Ccircle cx='24' cy='22' r='5' fill='%238b2a35'/%3E%3Ccircle cx='56' cy='22' r='5' fill='%238b2a35'/%3E%3Ccircle cx='18' cy='36' r='4.5' fill='%238b2a35'/%3E%3Ccircle cx='62' cy='36' r='4.5' fill='%238b2a35'/%3E%3C/svg%3E");
+      background-size: 80px 80px;
+      -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 55%);
+      mask-image: linear-gradient(to bottom, black 40%, transparent 55%);
+    }
+
+    .hero-inner {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: 60px;
+      max-width: 1200px;
+      width: 100%;
+    }
+
+    .hero-content { animation: fadeUp 1s ease both; }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-family: 'Nunito Sans', sans-serif;
+      font-stretch: expanded;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--rose-muted);
+      margin-bottom: 22px;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      display: block;
+      width: 30px;
+      height: 1px;
+      background: var(--rose-muted);
+    }
+
+    .hero-title {
+      font-family: 'Nunito Sans', sans-serif;
+      font-stretch: expanded;
+      font-size: clamp(3rem, 6vw, 5.2rem);
+      font-weight: 700;
+      line-height: 1.06;
+      color: var(--rose);
+      margin-bottom: 10px;
+    }
+    .hero-title em {
+      font-style: italic;
+      color: var(--rose-deep);
+    }
+
+    .hero-subtitle {
+      font-family: 'Nunito Sans', sans-serif;
+      font-stretch: expanded;
+      font-size: clamp(0.9rem, 2vw, 1.2rem);
+      font-weight: 400;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--rose-muted);
+      margin-bottom: 32px;
+    }
+
+    .hero-desc {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 400;
+      line-height: 1.75;
+      color: var(--text-muted);
+      max-width: 480px;
+      margin-bottom: 44px;
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: var(--rose);
+      color: var(--cream);
+      padding: 16px 36px;
+      border-radius: 40px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
+      box-shadow: 0 8px 24px rgba(139,42,53,0.22);
+    }
+    .btn-primary:hover {
+      background: var(--rose-deep);
+      transform: translateY(-2px);
+      box-shadow: 0 14px 34px rgba(139,42,53,0.3);
+    }
+
+    .btn-outline {
+      color: var(--rose);
+      padding: 15px 32px;
+      border-radius: 40px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: 1.5px solid var(--rose-pale);
+      cursor: pointer;
+      transition: border-color 0.3s, color 0.3s, background 0.3s;
+      background: transparent;
+    }
+    .btn-outline:hover {
+      border-color: var(--rose);
+      background: rgba(139,42,53,0.05);
+    }
+
+    .hero-visual {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 1.2s ease 0.3s both;
+    }
+
+    .hero-logo-wrap {
+      position: relative;
+      width: 380px;
+      height: 380px;
+    }
+    .hero-logo-wrap::before {
+      content: '';
+      position: absolute;
+      inset: -20px;
+      border-radius: 50%;
+      border: 1px solid var(--rose-pale);
+      animation: spin 20s linear infinite;
+    }
+    .hero-logo-wrap::after {
+      content: '';
+      position: absolute;
+      inset: -50px;
+      border-radius: 50%;
+      border: 1px dashed rgba(196,122,130,0.3);
+      animation: spin 30s linear infinite reverse;
+    }
+    .hero-logo-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      border-radius: 50%;
+      filter: drop-shadow(0 20px 60px rgba(139,42,53,0.25));
+    }
+
+    /* ── STATS STRIP ── */
+    .stats-strip {
+      background: var(--rose);
+      padding: 28px 5vw;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0;
+    }
+
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0 5vw;
+      border-right: 1px solid rgba(245,232,224,0.2);
+    }
+    .stat-item:last-child { border-right: none; }
+
+    .stat-number {
+      font-family: 'Nunito Sans', sans-serif;
+      font-stretch: expanded;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--cream);
+      line-height: 1;
+    }
+    .stat-label {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 400;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(245,232,224,0.65);
+      margin-top: 4px;
+    }
+
+    /* ── SECTIONS SHARED ── */
+    section { padding: 100px 5vw; }
+
+    .section-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Nunito Sans', sans-serif;
+      font-stretch: expanded;
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--rose-muted);
+      margin-bottom: 18px;
+    }
+    .section-tag::before {
+      content: '';
+      display: block;
+      width: 24px; height: 1px;
+      background: var(--rose-muted);
+    }
+
+    .section-title {
+      font-family: 'Nunito Sans', sans-serif;
+      font-stretch: expanded;
+      font-size: clamp(2rem, 4vw, 3.4rem);
+      font-weight: 700;
+      color: var(--rose);
+      line-height: 1.1;
+      margin-bottom: 18px;
+    }
+    .section-title em { font-style: normal; color: var(--rose-deep); }
+
+    .section-body {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.88rem;
+      line-height: 1.8;
+      color: var(--text-muted);
+    }
+
+    /* ── SERVICES ── */
+    #services { background: var(--blush); }
+
+    .services-header { text-align: center; margin-bottom: 64px; }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 28px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .service-card {
+      background: #f5ede8;
+      border-radius: 20px;
+      padding: 44px 32px 36px;
+      border: 1px solid var(--rose-pale);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.35s, box-shadow 0.35s;
+      cursor: default;
+    }
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--rose), var(--rose-pale));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s;
+    }
+    .service-card:hover { transform: translateY(-6px); box-shadow: 0 20px 50px rgba(139,42,53,0.12); }
+    .service-card:hover::before { transform: scaleX(1); }
+
+    .service-icon {
+      width: 56px; height: 56px;
+      background: rgba(139,42,53,0.08);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 22px;
+    }
+    .service-icon svg { width: 28px; height: 28px; stroke: var(--rose); fill: none; stroke-width: 1.5; }
+
+    .service-name {
+      font-family: 'Nunito Sans', sans-serif;
+      font-stretch: expanded;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 10px;
+    }
+
+    .service-desc {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.05rem;
+      line-height: 1.7;
+      color: var(--text-muted);
+    }
+
+    .service-price {
+      margin-top: 20px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--rose);
+    }
+
+    /* ── ABOUT ── */
+
+    .services-image-layout {
+      display: grid;
+      grid-template-columns: 1fr;
+      min-height: auto;
+    }
+    .services-left {
+      padding: 80px 5vw;
+      max-width: 1100px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    .services-image-right {
+      overflow: hidden;
+    }
+    @media (max-width: 860px) {
+      .services-image-layout {
+        grid-template-columns: 1fr;
+      }
+      .services-image-right {
+        min-height: 300px;
+      }
+    }
+
+    #about {
+      background: var(--cream);
+      padding: 0 !important;
+    }
+
+    .about-inner {
+      width: 100%;
+      max-width: 100%;
+      margin: 0;
+    }
+
+    .about-visual {
+      width: 100%;
+      position: relative;
+    }
+
+    .about-frame {
+      width: 100%;
+      border-radius: 0;
+      border: none;
+      overflow: hidden;
+      line-height: 0;
+    }
+
+    .about-center-logo {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: contain;
+    }
+
+    .about-badge {
+      position: absolute;
+      bottom: 28px; right: -20px;
+      background: var(--rose);
+      color: var(--cream);
+      border-radius: 16px;
+      padding: 18px 22px;
+      font-family: 'Playfair Display', serif;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(139,42,53,0.25);
+    }
+    .about-badge strong {
+      display: block;
+      font-size: 1.8rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+    .about-badge span {
+      font-size: 0.7rem;
+      font-family: 'DM Sans', sans-serif;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      opacity: 0.8;
+      font-style: normal;
+    }
+
+    .about-text .section-body {
+      margin-bottom: 20px;
+    }
+
+    .about-pillars {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 36px;
+    }
+
+    .pillar {
+      background: var(--blush);
+      border-radius: 14px;
+      padding: 20px;
+      border: 1px solid var(--rose-pale);
+    }
+    .pillar-title {
+      font-family: 'Nunito Sans', sans-serif;
+      font-stretch: expanded;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+    .pillar-desc {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.98rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+
+    /* ── WHY US ── */
+    #why {
+      background: var(--rose-deep);
+      padding: 90px 5vw;
+    }
+
+    #why .section-tag { color: var(--rose-pale); }
+    #why .section-tag::before { background: var(--rose-pale); }
+    #why .section-title { color: var(--cream); }
+
+    .why-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 80px;
+      align-items: start;
+    }
+
+    .why-list {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      margin-top: 20px;
+    }
+
+    .why-item {
+      display: flex;
+      gap: 18px;
+      align-items: flex-start;
+    }
+
+    .why-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: rgba(245,232,224,0.15);
+      line-height: 1;
+      min-width: 40px;
+    }
+    .why-content-title {
+      font-family: 'Nunito Sans', sans-serif;
+      font-stretch: expanded;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--cream);
+      margin-bottom: 6px;
+    }
+    .why-content-desc {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.05rem;
+      color: rgba(245,232,224,0.65);
+      line-height: 1.65;
+    }
+
+    /* ── CONTACT ── */
+    #contact { background: var(--blush); }
+
+    .contact-inner {
+      max-width: 100%;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 48px;
+      align-items: stretch;
+    }
+
+    .contact-info { display: flex; flex-direction: column; gap: 28px; margin-top: 12px; }
+
+    .contact-block {
+      display: flex;
+      gap: 18px;
+      align-items: flex-start;
+    }
+
+    .contact-icon {
+      width: 44px; height: 44px;
+      background: var(--cream);
+      border: 1px solid var(--rose-pale);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .contact-icon svg { width: 20px; height: 20px; stroke: var(--rose); fill: none; stroke-width: 1.6; }
+
+    .contact-label {
+      font-family: 'Nunito Sans', sans-serif;
+      font-stretch: expanded;
+      font-size: 0.68rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--rose-muted);
+      margin-bottom: 4px;
+    }
+    .contact-value {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.1rem;
+      color: var(--text);
+      line-height: 1.5;
+    }
+    .contact-value a {
+      color: var(--text);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    .contact-value a:hover { color: var(--rose); }
+
+    .social-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-top: 10px;
+    }
+    .social-link {
+      width: 44px; height: 44px;
+      background: var(--rose);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      transition: background 0.3s, transform 0.2s;
+    }
+    .social-link:hover { background: var(--rose-deep); transform: translateY(-2px); }
+    .social-link svg { width: 20px; height: 20px; fill: var(--cream); }
+
+    /* CONTACT FORM */
+    .contact-form { display: flex; flex-direction: column; gap: 16px; }
+
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group label {
+      font-family: 'Nunito Sans', sans-serif;
+      font-stretch: expanded;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--rose-muted);
+    }
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      background: #f5e8e0;
+      border: 1px solid var(--rose-pale);
+      border-radius: 12px;
+      padding: 14px 18px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.88rem;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.3s;
+      appearance: none;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      border-color: var(--rose);
+    }
+    .form-group textarea { resize: vertical; min-height: 110px; }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    @media(max-width:720px){ #contact .form-row { grid-template-columns: 1fr !important; } }
+
+    .form-submit {
+      background: var(--rose);
+      color: var(--cream);
+      padding: 16px;
+      border-radius: 12px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+      margin-top: 6px;
+    }
+    .form-submit:hover { background: var(--rose-deep); transform: translateY(-1px); }
+
+    /* ── LOCATION ── */
+    #location { background: var(--cream); }
+
+    .location-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 70px;
+      align-items: center;
+    }
+
+    .map-embed {
+      border-radius: 22px;
+      overflow: hidden;
+      border: 1px solid var(--rose-pale);
+      height: 400px;
+      background: var(--blush);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    /* Decorative map placeholder */
+    .map-placeholder {
+      width: 100%;
+      height: 100%;
+      background:
+        linear-gradient(135deg, var(--blush) 0%, var(--cream) 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+    .map-placeholder svg { width: 48px; height: 48px; stroke: var(--rose); fill: none; stroke-width: 1.3; }
+    .map-placeholder p {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1rem;
+      color: var(--rose-muted);
+      text-align: center;
+    }
+    .map-placeholder a {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.74rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--rose);
+      text-decoration: none;
+      padding: 10px 22px;
+      border: 1px solid var(--rose-pale);
+      border-radius: 30px;
+      transition: background 0.3s;
+    }
+    .map-placeholder a:hover { background: rgba(139,42,53,0.06); }
+
+    .hours-table { width: 100%; border-collapse: collapse; margin-top: 14px; }
+    .hours-table tr { border-bottom: 1px solid var(--rose-pale); }
+    .hours-table tr:last-child { border-bottom: none; }
+    .hours-table td {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.08rem;
+      padding: 12px 0;
+      color: var(--text);
+    }
+    .hours-table td:last-child {
+      text-align: right;
+      color: var(--text-muted);
+    }
+    .hours-table .closed { color: var(--rose-muted) !important; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--dark);
+      padding: 60px 5vw 36px;
+      text-align: center;
+    }
+
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+    .footer-logo img {
+      width: 50px; height: 50px;
+      object-fit: contain;
+      border-radius: 50%;
+      opacity: 0.85;
+    }
+    .footer-logo-text {
+      font-family: 'Nunito Sans', sans-serif;
+      font-stretch: expanded;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--cream);
+      letter-spacing: 0.06em;
+    }
+
+    .footer-tagline {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1rem;
+      color: rgba(245,232,224,0.45);
+      margin-bottom: 28px;
+      letter-spacing: 0.1em;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      flex-wrap: wrap;
+      margin-bottom: 28px;
+    }
+    .footer-links a {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(245,232,224,0.5);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    .footer-links a:hover { color: var(--rose-pale); }
+
+    .footer-divider {
+      width: 60px;
+      height: 1px;
+      background: rgba(245,232,224,0.15);
+      margin: 0 auto 24px;
+    }
+
+    .footer-copy {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.72rem;
+      color: rgba(245,232,224,0.3);
+      letter-spacing: 0.1em;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* ── RESPONSIVE ── */
+
+    /* Hero always centered on all screens */
+    .hero-inner {
+      justify-items: center;
+      text-align: center;
+    }
+    .hero-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .hero-desc { text-align: center; }
+    .hero-actions { justify-content: center; }
+
+    @media (max-width: 960px) {
+      .about-inner,
+      .contact-inner,
+      .location-inner,
+      .why-inner {
+        grid-template-columns: 1fr;
+        gap: 50px;
+      }
+      .about-badge { right: 10px; }
+      .why-inner { grid-template-columns: 1fr; }
+      .services-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 860px) {
+      .nav-logo-text span:first-child { font-size: 0.85rem; }
+      
+      .nav-logo img { height: 42px; width: 42px; }
+      .nav-links { gap: 20px; }
+      .nav-links a { font-size: 0.72rem; }
+      .nav-book-btn { padding: 8px 16px !important; font-size: 0.7rem !important; }
+    }
+
+    @media (max-width: 720px) {
+      nav { height: 56px; }
+      .mobile-menu { top: 56px; }
+      .nav-logo img { height: 36px; width: 36px; }
+      .nav-logo-text span:first-child { font-size: 0.8rem; }
+      .nav-logo-text span:last-child { font-size: 0.5rem; letter-spacing: 0.12em; }
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .form-row { grid-template-columns: 1fr; }
+      .about-pillars { grid-template-columns: 1fr; }
+      section { padding: 60px 5vw; }
+      .services-grid { grid-template-columns: 1fr; }
+      #services-hero > div { flex-direction: column !important; }
+      #services-hero > div > div:last-child { min-height: 300px !important; }
+      .about-inner { grid-template-columns: 1fr; gap: 30px; }
+      .contact-inner { grid-template-columns: 1fr; gap: 40px; }
+      .location-inner { grid-template-columns: 1fr; gap: 40px; }
+      .hero-title { font-size: clamp(2.2rem, 8vw, 4rem); }
+      .map-embed { height: 280px; }
+      .why-inner { grid-template-columns: 1fr; gap: 30px; }
+      .about-frame { aspect-ratio: 1/1; }
+    }
+
+    @media (max-width: 480px) {
+      nav { padding: 0 4vw; }
+      .nav-logo img { height: 42px; width: 42px; }
+      .nav-logo-text span:first-child { font-size: 0.9rem; }
+      section { padding: 50px 4vw; }
+      .hero { padding: 90px 4vw 50px; }
+      .btn-primary, .btn-outline { padding: 14px 24px; font-size: 0.75rem; }
+      .service-card { padding: 30px 22px 26px; }
+      .contact-inner, .location-inner { gap: 30px; }
+      .hours-table td { font-size: 0.9rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="navbar">
+    <a href="#" class="nav-logo">
+      <img src="logo.PNG" alt="The Pet Haus Logo" />
+      <div class="nav-logo-text">
+        <span class="nav-title" style="text-transform:uppercase;">The Pet Haus</span>
+        <span class="nav-sub">Grooming &amp; More</span>
+      </div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services-hero">Services</a></li>
+      <li><a href="#location">Hours</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><a href="#book-appointment" class="nav-book-btn">Book Now</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#about" onclick="closeMobile()">About</a>
+    <a href="#services-hero" onclick="closeMobile()">Services</a>
+    <a href="#location" onclick="closeMobile()">Hours</a>
+    <a href="#contact" onclick="closeMobile()">Contact</a>
+    <a href="#book-appointment" onclick="closeMobile()">Book Now</a>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <div class="hero-bg"></div>
+    <div class="hero-paw-pattern"></div>
+    <div class="hero-inner" style="grid-template-columns:1fr;justify-items:center;text-align:center;">
+      <div class="hero-content" style="display:flex;flex-direction:column;align-items:center;">
+        <img src="logo.PNG" alt="The Pet Haus" style="width:220px;margin-bottom:24px;filter:drop-shadow(0 4px 24px rgba(0,0,0,0.18));">
+        <p class="hero-desc" style="font-size:clamp(1.3rem,3vw,2rem);font-family:'Nunito Sans',sans-serif;font-variation-settings:'wdth' 125;letter-spacing:0.02em;">
+          "We treat them like our own"
+        </p>
+        <div id="about" style="position:relative;top:-120px;"></div>
+        <div class="story-layout">
+          <!-- Left: text -->
+          <div class="story-text">
+            <h2 style="font-family:'Nunito Sans',sans-serif;font-stretch:expanded;font-size:clamp(1.6rem,4vw,2.4rem);margin:10px 0 16px;color:var(--rose-deep);text-transform:uppercase;letter-spacing:0.05em;">Our <em style="font-style:normal;color:var(--rose-deep);">Story</em></h2>
+            <p style="font-family:'Montserrat',sans-serif;font-size:0.95rem;line-height:1.85;opacity:0.88;margin-bottom:14px;">
+              The Pet Haus is a family run pet salon with only one mission. To provide a safe, calm, and loving environment where pets receive the highest quality care.
+            </p>
+            <p style="font-family:'Montserrat',sans-serif;font-size:0.95rem;line-height:1.85;opacity:0.88;">
+              We understand that grooming is not just about appearance — it's about hygiene, comfort, and the overall well-being of your pet. We provide a stress-free, loving and careful environment, using the highest quality products, professional grooming techniques, and personalized care to ensure each pet leaves happy, clean, and looking their best.
+            </p>
+          </div>
+          <!-- Right: image + button -->
+          <div class="story-image">
+            <img src="img1.jpg" alt="The Pet Haus" style="width:100%;flex:1;object-fit:cover;display:block;border-radius:22px 22px 0 0;border:1.5px solid var(--rose-pale);border-bottom:none;box-shadow:0 -4px 24px rgba(139,42,53,0.08);min-height:0;">
+            <div style="background:var(--rose);border-radius:0 0 22px 22px;padding:20px 32px;display:flex;align-items:center;justify-content:center;border:1.5px solid var(--rose);">
+              <a href="#book-appointment" style="background:var(--cream);color:var(--rose);padding:12px 28px;border-radius:40px;font-family:'DM Sans',sans-serif;font-size:0.78rem;font-weight:500;letter-spacing:0.15em;text-transform:uppercase;text-decoration:none;transition:background 0.3s,transform 0.2s;" onmouseover="this.style.background='#f5e8e0';this.style.transform='translateY(-2px)';" onmouseout="this.style.background='var(--cream)';this.style.transform='translateY(0)';">Book an Appointment</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- SERVICES HERO COPY -->
+  <section id="services-hero" style="padding:0;">
+    <div class="services-image-layout">
+      <div class="services-left">
+        <div class="services-header reveal" style="text-align:center;margin-bottom:48px;">
+          <h2 class="section-title" style="text-transform:uppercase;letter-spacing:0.05em;">Services</h2>
+        </div>
+        <div class="services-grid">
+
+      <div class="service-card reveal">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24"><path d="M4 12h16v4a4 4 0 01-4 4H8a4 4 0 01-4-4v-4z"/><path d="M6 12V7a2 2 0 012-2h2a2 2 0 012 2v1"/><line x1="8" y1="15" x2="8" y2="15"/><line x1="12" y1="15" x2="12" y2="15"/><line x1="16" y1="15" x2="16" y2="15"/><line x1="10" y1="17" x2="10" y2="17"/><line x1="14" y1="17" x2="14" y2="17"/></svg>
+        </div>
+        <div class="service-name">Bath</div>
+      </div>
+
+      <div class="service-card reveal">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M20 4L8.12 15.88M14.47 14.48L20 20M8.12 8.12L12 12"/></svg>
+        </div>
+        <div class="service-name">Trim / Haircut</div>
+      </div>
+
+      <div class="service-card reveal">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 3v2M12 19v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M3 12h2M19 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/><circle cx="12" cy="12" r="4"/></svg>
+        </div>
+        <div class="service-name">Sanitary Clean</div>
+      </div>
+
+      <div class="service-card reveal">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+        </div>
+        <div class="service-name">Flea / Tick Treatment</div>
+      </div>
+
+      <div class="service-card reveal">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z"/><path d="M12 12v4M10 14h4"/></svg>
+        </div>
+        <div class="service-name">Hair Mask Treatment</div>
+      </div>
+
+      <div class="service-card reveal">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2C8.5 2 6 5 6 8c0 1.5.4 2.8.9 3.8L8 21h2l1-5h2l1 5h2l1.1-9.2c.5-1 .9-2.3.9-3.8 0-3-2.5-6-6-6z"/></svg>
+        </div>
+        <div class="service-name">Teeth Brushing</div>
+      </div>
+
+      <div class="service-card reveal">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24"><rect x="9" y="2" width="6" height="20" rx="2"/><rect x="2" y="9" width="20" height="6" rx="2"/></svg>
+        </div>
+        <div class="service-name">Anal Gland Expression</div>
+      </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+
+
+  <!-- BOOK AN APPOINTMENT -->
+  <section id="book-appointment" style="background:var(--blush);padding:80px 5vw;">
+    <div style="width:100%;max-width:700px;margin:0 auto;background:#eddbd3;border-radius:28px;padding:40px 48px;text-align:left;border:1.5px solid var(--rose-pale);box-shadow:0 8px 40px rgba(139,42,53,0.10), inset 0 0 0 1px rgba(255,255,255,0.35);">
+      <form class="contact-form" action="https://formsubmit.co/terkogaming@gmail.com" method="POST" style="background:none;border:none;padding:0;">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_next" value="thanks.html">
+        <input type="hidden" name="_template" value="table">
+        <h3 style="font-family:'Nunito Sans',sans-serif;font-stretch:expanded;font-size:1.6rem;color:var(--rose-deep);margin:0 0 24px;text-align:center;">Book an <em style="font-style:normal;">Appointment</em></h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Your Name</label>
+            <input type="text" name="Name" placeholder="Jane Doe" required />
+          </div>
+          <div class="form-group">
+            <label>Phone</label>
+            <input type="tel" name="Phone" placeholder="+(357) 99 000000" inputmode="numeric" pattern="[+0-9\s()]*" onkeypress="return /[0-9+()\s]/.test(event.key)" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" name="Email" placeholder="jane@example.com" required />
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Pet Name</label>
+            <input type="text" name="Pet Name" placeholder="Bella" />
+          </div>
+          <div class="form-group">
+            <label>Breed / Type</label>
+            <input type="text" name="Breed/Type" placeholder="Poodle" />
+          </div>
+        </div>
+        <div class="form-group" style="position:relative;">
+          <label>Service</label>
+          <div id="serviceDropdown" onclick="toggleServiceDropdown()" style="background:#f5e8e0;border:1px solid var(--rose-pale);border-radius:12px;padding:14px 18px;font-family:'Montserrat',sans-serif;font-size:0.88rem;color:var(--text-muted);cursor:pointer;user-select:none;display:flex;justify-content:space-between;align-items:center;">
+            <span id="serviceLabel">Select a service...</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;transition:transform 0.3s;" id="serviceChevron"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div id="serviceOptions" style="display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;background:#f5e8e0;border:1px solid var(--rose-pale);border-radius:12px;overflow:hidden;z-index:100;box-shadow:0 8px 24px rgba(139,42,53,0.12);">
+            <label class="service-checkbox-label">
+              <input type="checkbox" name="Service" value="Bath" onchange="updateServiceLabel()">
+              <span class="custom-check"><svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></span>
+              Bath
+            </label>
+            <label class="service-checkbox-label">
+              <input type="checkbox" name="Service" value="Trim / Haircut" onchange="updateServiceLabel()">
+              <span class="custom-check"><svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></span>
+              Trim / Haircut
+            </label>
+            <label class="service-checkbox-label">
+              <input type="checkbox" name="Service" value="Sanitary Clean" onchange="updateServiceLabel()">
+              <span class="custom-check"><svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></span>
+              Sanitary Clean
+            </label>
+            <label class="service-checkbox-label">
+              <input type="checkbox" name="Service" value="Flea / Tick Treatment" onchange="updateServiceLabel()">
+              <span class="custom-check"><svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></span>
+              Flea / Tick Treatment
+            </label>
+            <label class="service-checkbox-label">
+              <input type="checkbox" name="Service" value="Hair Mask Treatment" onchange="updateServiceLabel()">
+              <span class="custom-check"><svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></span>
+              Hair Mask Treatment
+            </label>
+            <label class="service-checkbox-label">
+              <input type="checkbox" name="Service" value="Teeth Brushing" onchange="updateServiceLabel()">
+              <span class="custom-check"><svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></span>
+              Teeth Brushing
+            </label>
+            <label class="service-checkbox-label">
+              <input type="checkbox" name="Service" value="Anal Gland Expression" onchange="updateServiceLabel()">
+              <span class="custom-check"><svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></span>
+              Anal Gland Expression
+            </label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Message</label>
+          <textarea name="Message" placeholder="Any special requests or notes for your pet..."></textarea>
+        </div>
+        <button type="submit" class="form-submit">Send an Inquiry</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- LOCATION / HOURS -->
+  <section id="location">
+    <!-- Opening Hours alone on top -->
+    <div class="reveal" style="max-width:1100px;margin:0 auto 60px;">
+      <h2 class="section-title" style="text-align:center;text-transform:uppercase;letter-spacing:0.05em;">Opening Hours</h2>
+      <table class="hours-table">
+        <tr><td>Monday</td><td>9:00 AM – 6:00 PM</td></tr>
+        <tr><td>Tuesday</td><td>9:00 AM – 6:00 PM</td></tr>
+        <tr><td>Wednesday</td><td>9:00 AM – 6:00 PM</td></tr>
+        <tr><td>Thursday</td><td>9:00 AM – 6:00 PM</td></tr>
+        <tr><td>Friday</td><td>9:00 AM – 6:00 PM</td></tr>
+        <tr><td>Saturday</td><td>9:00 AM – 3:00 PM</td></tr>
+        <tr><td class="closed">Sunday</td><td class="closed">Closed</td></tr>
+      </table>
+    </div>
+
+    <!-- Find Us + Map below -->
+    <div class="reveal" style="max-width:1100px;margin:0 auto;text-align:center;">
+      <h2 class="section-title" style="text-align:center;text-transform:uppercase;letter-spacing:0.05em;">Find Us</h2>
+    </div>
+    <div class="map-embed reveal" style="max-width:1100px;margin:24px auto 0;height:400px;">
+      <a href="https://maps.app.goo.gl/gckhaPXyvs5Nc3G86" target="_blank" style="display:block;width:100%;height:100%;position:relative;">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3276.767848552951!2d32.420072976039!3d34.786619172889296!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14e707e152e2551b%3A0x7adf54784e9f7a9e!2sTHE%20PET%20HAUS!5e0!3m2!1sen!2s!4v1773336325274!5m2!1sen!2s"
+          width="100%" height="100%" style="border:0;border-radius:22px;pointer-events:none;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+        <div style="position:absolute;inset:0;cursor:pointer;border-radius:22px;"></div>
+      </a>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="contact-inner">
+      <div class="reveal">
+        <h2 class="section-title">Get in touch</h2>
+
+        <div class="contact-info">
+          <div class="contact-block">
+            <div class="contact-icon">
+              <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.01 1.18 2 2 0 012 0h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 14v2.92z"/></svg>
+            </div>
+            <div>
+              <div class="contact-label">Phone</div>
+              <div class="contact-value" style="font-family:'Montserrat', sans-serif;font-size:1rem;white-space:nowrap;"><a href="tel:+35797906165">+357 97906165</a></div>
+            </div>
+          </div>
+
+          <div class="contact-block">
+            <div class="contact-icon">
+              <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z" stroke="var(--rose)" fill="none" stroke-width="1.6"/></svg>
+            </div>
+            <div>
+              <div class="contact-label">WhatsApp</div>
+              <div class="contact-value" style="font-family:'Montserrat', sans-serif;font-size:1rem;white-space:nowrap;"><a href="https://wa.me/35797906165" target="_blank">+357 97906165</a></div>
+            </div>
+          </div>
+          <div class="contact-block">
+            <div class="contact-icon">
+              <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            </div>
+            <div>
+              <div class="contact-label">Email</div>
+              <div class="contact-value" style="font-family:'Montserrat', sans-serif;font-size:0.95rem;white-space:nowrap;"><a href="mailto:grooming@thepethauscy.com" style="color:inherit;text-decoration:none;">grooming@thepethauscy.com</a></div>
+            </div>
+          </div>
+          <div class="contact-block">
+            <div class="contact-icon">
+              <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <div>
+              <div class="contact-label">Address</div>
+              <div class="contact-value" style="font-family:'Montserrat', sans-serif;font-size:0.95rem;">Akamantidos 16, Paphos<br>Cyprus 8016</div>
+            </div>
+          </div>
+          <div>
+            <div class="contact-label" style="margin-bottom:10px;">Follow Us</div>
+            <div class="social-row">
+              <a href="https://www.instagram.com/thepethauscy/" target="_blank" class="social-link" aria-label="Instagram" style="background:#3d2228;">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">
+      <img src="logo.PNG" alt="The Pet Haus" />
+      <div style="display:flex;flex-direction:column;align-items:center;">
+        <span class="footer-logo-text" style="text-transform:uppercase;">The Pet Haus</span>
+        <span style="font-family:'Montserrat',sans-serif;font-size:0.75rem;letter-spacing:0.22em;text-transform:uppercase;color:rgba(245,232,224,0.5);margin-top:4px;text-align:center;">Grooming &amp; More</span>
+      </div>
+    </div>
+    <p class="footer-tagline">"We treat them like our own"</p>
+    <div class="footer-links">
+      <a href="#home">Home</a>
+      <a href="#about">About</a>
+      <a href="#services-hero">Services</a>
+      <a href="#contact">Contact</a>
+      <a href="https://www.instagram.com/thepethauscy/" target="_blank">Instagram</a>
+    </div>
+    <div class="footer-divider"></div>
+    <p class="footer-copy">&copy; 2026 The Pet Haus. All rights reserved.</p>
+  </footer>
+
+  <script>
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    window.scrollTo(0, 0);
+    document.addEventListener('DOMContentLoaded', () => window.scrollTo(0, 0));
+    window.addEventListener('load', () => window.scrollTo(0, 0));
+  </script>
+  <script>
+    // Navbar scroll
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 40);
+    });
+
+    // Hamburger
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('open');
+      mobileMenu.classList.toggle('open');
+    });
+    function closeMobile() {
+      hamburger.classList.remove('open');
+      mobileMenu.classList.remove('open');
+    }
+
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    reveals.forEach(el => observer.observe(el));
+
+    // Custom service dropdown
+    function toggleServiceDropdown() {
+      const options = document.getElementById('serviceOptions');
+      const chevron = document.getElementById('serviceChevron');
+      const isOpen = options.style.display === 'block';
+      options.style.display = isOpen ? 'none' : 'block';
+      chevron.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(180deg)';
+    }
+    function updateServiceLabel() {
+      const checked = [...document.querySelectorAll('input[name="Service"]:checked')].map(i => i.value);
+      const label = document.getElementById('serviceLabel');
+      label.style.color = checked.length ? 'var(--text)' : 'var(--text-muted)';
+      label.textContent = checked.length ? checked.join(', ') : 'Select a service...';
+    }
+    document.addEventListener('click', function(e) {
+      const dropdown = document.getElementById('serviceDropdown');
+      const options = document.getElementById('serviceOptions');
+      if (dropdown && options && !dropdown.contains(e.target) && !options.contains(e.target)) {
+        options.style.display = 'none';
+        document.getElementById('serviceChevron').style.transform = 'rotate(0deg)';
+      }
+    });
+
+    // Before submit: collect all checked services into one hidden input
+    document.querySelector('.contact-form').addEventListener('submit', function() {
+      const checked = [...document.querySelectorAll('input[name="Service"]:checked')].map(i => i.value);
+      // Disable all individual checkboxes so they don't send separately
+      document.querySelectorAll('input[name="Service"]').forEach(cb => cb.disabled = true);
+      // Create a single hidden input with all selected values joined
+      const hidden = document.createElement('input');
+      hidden.type = 'hidden';
+      hidden.name = 'Services';
+      hidden.value = checked.join(', ');
+      this.appendChild(hidden);
+    });
+
+    // Form
+    function handleSubmit(e) {
+      e.preventDefault();
+      const btn = e.target.querySelector('.form-submit');
+      btn.textContent = 'Request Sent!';
+      btn.style.background = 'var(--rose-deep)';
+      setTimeout(() => {
+        btn.textContent = 'Send an Inquiry';
+        btn.style.background = '';
+        e.target.reset();
+      }, 3000);
+    }
+  </script>
+</body>
+</html>
